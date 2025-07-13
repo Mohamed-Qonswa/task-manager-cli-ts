@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Task, TaskStorage } from '../types';
+import { Task, TaskStorage, Priority } from '../types';
 
 export class TaskService {
   private readonly filePath: string;
@@ -30,13 +30,16 @@ export class TaskService {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
   }
 
-  addTask(title: string, description?: string): Task {
+  addTask(title: string, description?: string, priority: Priority = 'medium', dueDate?: Date, category?: string): Task {
     const storage = this.readStorage();
     const newTask: Task = {
       id: this.generateId(),
       title,
       description,
       completed: false,
+      priority,
+      dueDate,
+      category,
       createdAt: new Date(),
     };
     
@@ -47,7 +50,23 @@ export class TaskService {
 
   getAllTasks(): Task[] {
     const storage = this.readStorage();
-    return storage.tasks;
+    return storage.tasks.sort((a, b) => {
+      // Sort by priority (high -> medium -> low), then by due date, then by creation date
+      const priorityOrder = { high: 3, medium: 2, low: 1 };
+      if (a.priority !== b.priority) {
+        return priorityOrder[b.priority] - priorityOrder[a.priority];
+      }
+      
+      // If priorities are equal, sort by due date (earliest first)
+      if (a.dueDate && b.dueDate) {
+        return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+      }
+      if (a.dueDate && !b.dueDate) return -1;
+      if (!a.dueDate && b.dueDate) return 1;
+      
+      // Finally sort by creation date
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    });
   }
 
   getTaskById(id: string): Task | undefined {
@@ -80,5 +99,25 @@ export class TaskService {
     }
     
     return false;
+  }
+
+  searchTasks(query: string): Task[] {
+    const storage = this.readStorage();
+    const lowercaseQuery = query.toLowerCase();
+    return storage.tasks.filter(task => 
+      task.title.toLowerCase().includes(lowercaseQuery) || 
+      (task.description && task.description.toLowerCase().includes(lowercaseQuery)) ||
+      (task.category && task.category.toLowerCase().includes(lowercaseQuery))
+    );
+  }
+
+  filterTasks(filter: { completed?: boolean; priority?: Priority; category?: string }): Task[] {
+    const storage = this.readStorage();
+    return storage.tasks.filter(task => {
+      if (filter.completed !== undefined && task.completed !== filter.completed) return false;
+      if (filter.priority && task.priority !== filter.priority) return false;
+      if (filter.category && task.category !== filter.category) return false;
+      return true;
+    });
   }
 } 

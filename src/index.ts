@@ -2,21 +2,30 @@
 
 import { Command } from 'commander';
 import { TaskCommands } from './commands';
+import { Priority } from './types';
 
 const program = new Command();
 const taskCommands = new TaskCommands();
 
 program
   .name('task-cli')
-  .description('A simple CLI app for managing tasks')
+  .description('A powerful CLI app for managing tasks with priorities, due dates, and categories')
   .version('1.0.0');
 
-// Add command
+// Add command with enhanced options
 program
   .command('add <title> [description]')
   .description('Add a new task')
-  .action((title: string, description?: string) => {
-    taskCommands.add(title, description);
+  .option('-p, --priority <priority>', 'Set task priority (low, medium, high)', 'medium')
+  .option('-d, --due <date>', 'Set due date (YYYY-MM-DD format)')
+  .option('-c, --category <category>', 'Set task category')
+  .action((title: string, description?: string, options?: any) => {
+    const priority = options?.priority as Priority || 'medium';
+    if (!['low', 'medium', 'high'].includes(priority)) {
+      console.error('❌ Invalid priority. Use: low, medium, or high');
+      return;
+    }
+    taskCommands.add(title, description, priority, options?.due, options?.category);
   });
 
 // List command
@@ -25,6 +34,22 @@ program
   .description('List all tasks')
   .action(() => {
     taskCommands.list();
+  });
+
+// Search command
+program
+  .command('search <query>')
+  .description('Search tasks by title, description, or category')
+  .action((query: string) => {
+    taskCommands.search(query);
+  });
+
+// Filter command
+program
+  .command('filter <type> <value>')
+  .description('Filter tasks by status, priority, or category')
+  .action((type: string, value: string) => {
+    taskCommands.filter(type, value);
   });
 
 // Complete command
