@@ -2,7 +2,7 @@
 
 A powerful command-line interface (CLI) application built with TypeScript for managing tasks with advanced features like priorities, due dates, categories, and search functionality. Tasks are stored locally in a JSON file.
 
-## ✨ Features
+##  Features
 
 ### Core Features
 - 📝 Add tasks with title and optional description
@@ -69,7 +69,7 @@ node node_modules/ts-node/dist/bin.js src/index.ts filter category work
 node node_modules/ts-node/dist/bin.js src/index.ts filter status completed
 ```
 
-## 🎯 Command Reference
+## Command Reference
 
 ### Add Task
 ```bash
@@ -125,7 +125,7 @@ complete <task-id>
 delete <task-id>
 ```
 
-## 🎨 Visual Features
+##  Visual Features
 
 ### Priority Indicators
 - 🔥 **HIGH** (Red) - Urgent tasks
@@ -161,14 +161,14 @@ task-cli/
 └── GUI_ROADMAP.md        # Future GUI development plans
 ```
 
-## 🛠️ Technologies Used
+##  Technologies Used
 
 - **TypeScript**: For type-safe code and better developer experience
 - **Commander.js**: For parsing command-line arguments and options
 - **Node.js**: Runtime environment
 - **File System (fs)**: For local JSON storage
 
-## 🔮 Future Development
+##  Future Development
 
 ### GUI Application
 A comprehensive GUI application is planned with:
@@ -186,7 +186,7 @@ See [`GUI_ROADMAP.md`](./GUI_ROADMAP.md) for detailed development plans.
 - 🔔 **Notifications**: Desktop reminders
 - 📤 **Export/Import**: CSV, JSON, and other formats
 
-## 🧪 Development
+## Development
 
 ### Scripts
 - `npm start`: Run the CLI in development mode
@@ -206,7 +206,7 @@ The project uses strict TypeScript settings:
 - CommonJS modules
 - Source maps for debugging
 
-## 📊 Example Output
+## Example Output
 
 ```
 📋 Your Tasks:
@@ -227,7 +227,7 @@ The project uses strict TypeScript settings:
 📊 Total: 2 | Completed: 0 | Pending: 2
 ```
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Feel free to:
 - Report bugs
@@ -241,4 +241,4 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-*Built with ❤️ using TypeScript and Node.js* 
+*Built using TypeScript and Node.js* 
